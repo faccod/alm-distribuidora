@@ -69,3 +69,6 @@ deploy-*.mjs
 deploy-*.sh
 github-*.mjs
 github-*.ps1
+
+.vercel
+.env*

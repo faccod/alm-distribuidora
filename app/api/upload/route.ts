@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { put } from '@vercel/blob';
 import { getSessao } from '../../../lib/auth';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
@@ -6,6 +7,7 @@ import path from 'path';
 
 export const runtime = 'nodejs';
 
+// Usa Vercel Blob em produção (BLOB_READ_WRITE_TOKEN setado) e filesystem local em dev
 export async function POST(req: Request) {
   const sessao = getSessao();
   if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
@@ -23,10 +25,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Arquivo muito grande (máx 5MB)' }, { status: 400 });
   }
 
-  const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const dir = path.join(process.cwd(), 'public', 'uploads');
-  if (!existsSync(dir)) await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, filename), bytes);
+  const filename = `uploads/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
-  return NextResponse.json({ url: `/uploads/${filename}` });
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    // Produção: Vercel Blob (CDN global, persiste, libera até 500MB no plano free)
+    const blob = await put(filename, bytes, {
+      access: 'public',
+      addRandomSuffix: false,
+    });
+    return NextResponse.json({ url: blob.url });
+  } else {
+    // Dev: grava no filesystem local
+    const dir = path.join(process.cwd(), 'public', 'uploads');
+    if (!existsSync(dir)) await mkdir(dir, { recursive: true });
+    const localName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    await writeFile(path.join(dir, localName), bytes);
+    return NextResponse.json({ url: `/uploads/${localName}` });
+  }
 }
