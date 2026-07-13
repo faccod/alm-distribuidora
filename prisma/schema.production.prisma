@@ -1,0 +1,169 @@
+// ALM Distribuidora - Schema profissional
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senhaHash String
+  perfil    String   // "ADMIN" | "GERENTE" | "VENDEDOR" | "CD"
+  ativo     Boolean  @default(true)
+  criadoEm  DateTime @default(now())
+  pedidos   Pedido[]
+}
+
+model Cliente {
+  id              String   @id @default(cuid())
+  nome            String
+  nomeFantasia    String?
+  tipo            String   @default("PESSOA_JURIDICA") // PESSOA_FISICA | PESSOA_JURIDICA
+  cpfCnpj         String?
+  inscricaoEstadual String?
+  email           String?
+  site            String?
+
+  // Endereço principal
+  cep             String?
+  endereco        String?
+  numero          String?
+  complemento     String?
+  bairro          String?
+  cidade          String?
+  estado          String?
+
+  // Contatos (JSON: [{nome, cargo, telefone, email}])
+  contatos        String?  // JSON serializado
+
+  // Financeiro
+  limiteCredito   Float    @default(0)
+  condicaoPgto    String?  // "À vista", "Boleto 30/45/60"
+  dadosBancarios  String?
+  // Status financeiro: ATIVO, INADIMPLENTE, BLOQUEADO
+  statusFinanc    String   @default("ATIVO")
+
+  // Foto/logo
+  foto            String?
+
+  // Classificação
+  tags            String?  // CSV ex: "VIP,Atacado,Atacadista"
+  observacoes     String?
+
+  // Controle
+  ativo           Boolean  @default(true)
+  criadoEm        DateTime @default(now())
+  atualizadoEm    DateTime @updatedAt
+
+  pedidos         Pedido[]
+
+  @@index([nome])
+  @@index([cidade])
+  @@index([cpfCnpj])
+}
+
+model Categoria {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique
+  icone     String?
+  cor       String?   // hex color
+  ordem     Int       @default(0)
+  ativo     Boolean   @default(true)
+  produtos  Produto[]
+}
+
+model Marca {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique
+  produtos  Produto[]
+}
+
+model Produto {
+  id            Int      @id @default(autoincrement())
+  // Identificação
+  nome          String
+  descricao     String?
+  sku           String?  @unique
+  codigoBarras  String?
+  // Vínculos
+  categoriaId   Int
+  marcaId       Int?
+  // Unidade e embalagem
+  unidade       String   @default("UN")  // UN, CX, PCT, RL, KG
+  unidadesPorEmbalagem Int? // ex: CX contém 20 carteiras
+  // Preços
+  precoCusto    Float    @default(0)
+  precoTabela   Float    @default(0)
+  precoPromocional Float?
+  // Estoque
+  estoque       Int      @default(0)
+  estoqueMinimo Int      @default(0)
+  // Imagem
+  foto          String?
+  // Flags
+  ativo         Boolean  @default(true)
+  destaque      Boolean  @default(false)
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+
+  categoria     Categoria @relation(fields: [categoriaId], references: [id])
+  marca         Marca?    @relation(fields: [marcaId], references: [id])
+  itens         ItemPedido[]
+
+  @@index([nome])
+  @@index([sku])
+}
+
+model Pedido {
+  id           String   @id @default(cuid())
+  numero       Int      @unique
+  data         DateTime @default(now())
+  clienteId    String
+  vendedorId   String
+  status       String   @default("RASCUNHO")
+  condicaoPgto String?
+  observacoes  String?
+  desconto     Float    @default(0)
+  total        Float    @default(0)
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  cliente   Cliente     @relation(fields: [clienteId], references: [id])
+  vendedor  Usuario     @relation(fields: [vendedorId], references: [id])
+  itens     ItemPedido[]
+  historico HistoricoPedido[]
+
+  @@index([data])
+  @@index([status])
+}
+
+model ItemPedido {
+  id          String  @id @default(cuid())
+  pedidoId    String
+  produtoId   Int
+  quantidade  Float
+  precoUnit   Float
+  precoCusto  Float   @default(0)  // snapshot do custo no momento
+  desconto    Float   @default(0)
+  total       Float
+  observacao  String?
+
+  pedido  Pedido  @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  produto Produto @relation(fields: [produtoId], references: [id])
+
+  @@index([pedidoId])
+}
+
+model HistoricoPedido {
+  id        String   @id @default(cuid())
+  pedidoId  String
+  status    String
+  usuario   String
+  data      DateTime @default(now())
+  pedido    Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+}

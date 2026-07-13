@@ -1,0 +1,13 @@
+{
+  "name": "ALM Distribuidora",
+  "short_name": "ALM",
+  "description": "Sistema de pedidos da ALM Distribuidora",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
