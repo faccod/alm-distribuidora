@@ -11,6 +11,11 @@ const nextConfig = {
           { key: 'Service-Worker-Allowed', value: '/' },
         ],
       },
+      {
+        // Forçar charset utf-8 em todos os responses de API (corrige mojibake em JSON)
+        source: '/api/:path*',
+        headers: [{ key: 'Content-Type', value: 'application/json; charset=utf-8' }],
+      },
     ];
   },
 };

@@ -146,10 +146,10 @@ async function main() {
   await prisma.usuario.create({ data: { nome: 'CD Ubá', email: 'cd@alm.com', senhaHash: senhaCD, perfil: 'CD' } });
 
   // === PEDIDO exemplo ===
-  const aurelio = await prisma.usuario.findFirst({ where: { perfil: 'VENDEDOR' } });
+  const aurelio = await prisma.usuario.findFirst({ where: { perfil: 'ADMIN' } });
   const montanha = await prisma.cliente.findFirst({ where: { nome: { contains: 'Montanha' } } });
-  const ice = await prisma.produto.findFirst({ where: { nome: { contains: 'Brigadeiro Ice' } } });
-  const mela = await prisma.produto.findFirst({ where: { nome: { contains: 'Brigadeiro Melancia' } } });
+  const ice = await prisma.produto.findFirst({ where: { nome: { contains: 'Brigadu Ice' } } });
+  const mela = await prisma.produto.findFirst({ where: { nome: { contains: 'Brigadu Melancia' } } });
   const sabiá = await prisma.produto.findFirst({ where: { nome: { contains: 'Sabiá' } } });
 
   const pedido = await prisma.pedido.create({

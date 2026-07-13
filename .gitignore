@@ -64,3 +64,8 @@ BACKUP_*
 fix-*.mjs
 test-*.mjs
 limpa-*.mjs
+deploy-*.ps1
+deploy-*.mjs
+deploy-*.sh
+github-*.mjs
+github-*.ps1
