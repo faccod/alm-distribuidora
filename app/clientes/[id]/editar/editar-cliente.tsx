@@ -78,15 +78,13 @@ export default function EditarCliente({ cliente }: { cliente: Cliente }) {
   }
 
   async function uploadFoto(file: File) {
-    const fd = new FormData();
-    fd.append('file', file);
-    const r = await fetch('/api/upload', { method: 'POST', body: fd });
-    if (r.ok) {
-      const d = await r.json();
+    try {
+      const { uploadFile } = await import('../../../../lib/upload');
+      const d = await uploadFile(file);
       upd('foto', d.url);
       toast.success('Logo atualizado');
-    } else {
-      toast.error('Erro ao enviar logo');
+    } catch (e: any) {
+      toast.error('Erro ao enviar logo: ' + (e?.message || ''));
     }
   }
 
