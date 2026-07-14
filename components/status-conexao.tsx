@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useOnline } from '../lib/use-online';
 
 export default function StatusConexao() {

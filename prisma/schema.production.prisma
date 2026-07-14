@@ -17,6 +17,7 @@ model Usuario {
   ativo     Boolean  @default(true)
   criadoEm  DateTime @default(now())
   pedidos   Pedido[]
+  sessoes   Sessao[]
 }
 
 model Cliente {
@@ -166,4 +167,15 @@ model HistoricoPedido {
   usuario   String
   data      DateTime @default(now())
   pedido    Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+}
+
+model Sessao {
+  token      String   @id
+  usuarioId  String
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  criadoEm   DateTime @default(now())
+  expiraEm   DateTime
+
+  @@index([usuarioId])
+  @@index([expiraEm])
 }

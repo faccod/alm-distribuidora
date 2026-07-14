@@ -1,4 +1,4 @@
-import './globals.css';
+﻿import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
 import { ThemeProvider } from '../components/theme-provider';

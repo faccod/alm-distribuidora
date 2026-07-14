@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { getSessao } from '../../lib/auth';
+import { buscarSessao } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl } from '../../lib/format';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -15,7 +15,7 @@ import RelatoriosClient from './relatorios-client';
 export const dynamic = 'force-dynamic';
 
 export default async function Relatorios({ searchParams }: { searchParams: any }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   // Parse de filtros

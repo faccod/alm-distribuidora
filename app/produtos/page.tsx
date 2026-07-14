@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { getSessao } from '../../lib/auth';
+import { buscarSessao } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl } from '../../lib/format';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -16,7 +16,7 @@ import ProdutosListClient from './produtos-client';
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }: { searchParams: { cat?: string; q?: string; status?: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   const busca = searchParams.q || '';

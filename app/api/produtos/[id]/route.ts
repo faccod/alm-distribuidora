@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../lib/prisma';
-import { getSessao } from '../../../../lib/auth';
+import { buscarSessao } from '../../../../lib/auth';
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
   const id = parseInt(params.id);
@@ -39,7 +39,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
   const id = parseInt(params.id);

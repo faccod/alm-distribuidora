@@ -1,4 +1,4 @@
-// Fila de pedidos offline (IndexedDB)
+﻿// Fila de pedidos offline (IndexedDB)
 // Quando o vendedor cria pedido sem internet, salva aqui.
 // Quando volta a conexão, sincroniza com o servidor.
 

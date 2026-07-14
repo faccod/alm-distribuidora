@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Printer, Bluetooth, Copy, Download, X, Check, AlertCircle } from 'lucide-react';

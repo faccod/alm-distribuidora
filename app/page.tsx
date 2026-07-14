@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getSessao } from '../lib/auth';
+import { buscarSessao } from '../lib/auth';
 import { prisma } from '../lib/prisma';
 import { brl } from '../lib/format';
 import {
@@ -23,7 +23,7 @@ import { ThemeToggle } from '../components/theme-toggle';
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   const inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1);

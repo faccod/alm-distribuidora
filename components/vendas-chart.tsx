@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { brl } from '../lib/format';
 

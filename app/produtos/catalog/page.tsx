@@ -1,5 +1,5 @@
 import { prisma } from '../../../lib/prisma';
-import { getSessao } from '../../../lib/auth';
+import { buscarSessao } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl } from '../../../lib/format';
 import { IconePorNome } from '../../../components/categoria-dialog';
@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 const ITENS_POR_PAGINA = 12; // 2 colunas × 6 linhas
 
 export default async function CatalogoPage({ searchParams }: { searchParams: { cat?: string; q?: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   const cat = searchParams.cat ? parseInt(searchParams.cat) : null;

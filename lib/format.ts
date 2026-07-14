@@ -1,4 +1,4 @@
-export const brl = (n: number) =>
+﻿export const brl = (n: number) =>
   n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
 export const STATUS_LABEL: Record<string, string> = {

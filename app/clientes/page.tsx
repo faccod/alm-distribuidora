@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { getSessao } from '../../lib/auth';
+import { buscarSessao } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl } from '../../lib/format';
 import { Card, CardContent } from '../../components/ui/card';
@@ -13,7 +13,7 @@ import ClientesListClient from './clientes-client';
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }: { searchParams: { q?: string; uf?: string; status?: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   const busca = searchParams.q || '';

@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { getSessao } from '../../lib/auth';
+import { buscarSessao } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl } from '../../lib/format';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ import UsuariosClient from './usuarios-client';
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
   if (sessao.perfil !== 'GERENTE' && sessao.perfil !== 'ADMIN') {
     return (

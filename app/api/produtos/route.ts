@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
-import { getSessao } from '../../../lib/auth';
+import { buscarSessao } from '../../../lib/auth';
 
 export async function GET(req: Request) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
   const url = new URL(req.url);
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
   const body = await req.json();

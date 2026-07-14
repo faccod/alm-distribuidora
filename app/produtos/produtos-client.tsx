@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Search, Filter, Star, AlertTriangle, PackageX } from 'lucide-react';

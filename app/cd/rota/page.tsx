@@ -1,5 +1,5 @@
 import { prisma } from '../../../lib/prisma';
-import { getSessao } from '../../../lib/auth';
+import { buscarSessao } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl } from '../../../lib/format';
 import { PrintButton } from '../../../components/print-button';
@@ -7,7 +7,7 @@ import { PrintButton } from '../../../components/print-button';
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }: { searchParams: { data?: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
   if (sessao.perfil !== 'CD' && sessao.perfil !== 'GERENTE' && sessao.perfil !== 'ADMIN') {
     return <div className="p-6 text-center">Sem permissão.</div>;

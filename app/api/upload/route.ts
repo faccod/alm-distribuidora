@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import { getSessao } from '../../../lib/auth';
+import { buscarSessao } from '../../../lib/auth';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
 // Usa Vercel Blob em produção (BLOB_READ_WRITE_TOKEN setado) e filesystem local em dev
 export async function POST(req: Request) {
   try {
-    const sessao = getSessao();
+    const sessao = await buscarSessao();
     if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
     const fd = await req.formData();

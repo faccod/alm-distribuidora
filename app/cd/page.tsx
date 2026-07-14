@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { getSessao } from '../../lib/auth';
+import { buscarSessao } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { Card, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -10,7 +10,7 @@ import PainelClient from './painel-client';
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
   if (sessao.perfil !== 'CD' && sessao.perfil !== 'GERENTE' && sessao.perfil !== 'ADMIN') {
     return (

@@ -1,4 +1,4 @@
-// Gera o texto de cupom térmico (58mm = 32 colunas, 80mm = 42 colunas)
+﻿// Gera o texto de cupom térmico (58mm = 32 colunas, 80mm = 42 colunas)
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 

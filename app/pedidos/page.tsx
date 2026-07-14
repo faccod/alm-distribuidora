@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { getSessao } from '../../lib/auth';
+import { buscarSessao } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { brl, STATUS_COR, STATUS_LABEL } from '../../lib/format';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ const STATUS_VARIANT: any = {
 };
 
 export default async function Page({ searchParams }: { searchParams: { q?: string; status?: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   const q = searchParams.q || '';

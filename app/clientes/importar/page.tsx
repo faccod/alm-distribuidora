@@ -1,4 +1,4 @@
-import { getSessao } from '../../../lib/auth';
+import { buscarSessao } from '../../../lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import ImportarClientes from './importar';
@@ -6,7 +6,7 @@ import ImportarClientes from './importar';
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
   if (sessao.perfil === 'VENDEDOR' || sessao.perfil === 'CD') {
     return (

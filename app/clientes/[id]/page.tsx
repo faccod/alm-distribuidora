@@ -1,5 +1,5 @@
 import { prisma } from '../../../lib/prisma';
-import { getSessao } from '../../../lib/auth';
+import { buscarSessao } from '../../../lib/auth';
 import { redirect, notFound } from 'next/navigation';
 import { brl, STATUS_COR, STATUS_LABEL } from '../../../lib/format';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const sessao = getSessao();
+  const sessao = await buscarSessao();
   if (!sessao) redirect('/login');
 
   const cliente = await prisma.cliente.findUnique({
