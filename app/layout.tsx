@@ -1,10 +1,10 @@
-﻿import './globals.css';
+import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import { cookies } from 'next/headers';
 import { ThemeProvider } from '../components/theme-provider';
 import { Toaster } from '../components/ui/sonner';
 import StatusConexao from '../components/status-conexao';
 import { Sidebar } from '../components/sidebar';
+import { buscarSessao } from '../lib/auth';
 
 export const metadata: Metadata = {
   title: 'ALM Distribuidora',
@@ -20,18 +20,8 @@ export const viewport: Viewport = {
   themeColor: '#0f172a',
 };
 
-function getSessaoFromCookie() {
-  const c = cookies().get('alm_session');
-  if (!c) return null;
-  try {
-    return JSON.parse(c.value);
-  } catch {
-    return null;
-  }
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const sessao = getSessaoFromCookie();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const sessao = await buscarSessao();
 
   return (
     <html lang="pt-BR" suppressHydrationWarning>
