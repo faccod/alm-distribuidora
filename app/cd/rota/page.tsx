@@ -17,7 +17,11 @@ export default async function Page({ searchParams }: { searchParams: { data?: st
   const pedidos = await prisma.pedido.findMany({
     where: { status: { in: ['ENVIADO', 'EM_SEPARACAO'] } },
     orderBy: [{ cliente: { cidade: 'asc' } }, { cliente: { estado: 'asc' } }, { data: 'asc' }],
-    include: { cliente: true, itens: true, vendedor: true },
+    include: {
+      cliente: true,
+      vendedor: true,
+      itens: { include: { produto: true } },
+    },
   });
 
   // Agrupa por cidade
@@ -91,7 +95,7 @@ export default async function Page({ searchParams }: { searchParams: { data?: st
                         <tr key={i.id} className="border-b border-gray-300">
                           <td className="py-1">{Number(i.quantidade)}</td>
                           <td className="py-1">
-                            Produto #{i.produtoId}
+                            {i.produto?.nome || `Produto #${i.produtoId}`}
                             {i.observacao && <div className="text-xs italic">{i.observacao}</div>}
                           </td>
                           <td className="text-right">{brl(Number(i.total))}</td>
