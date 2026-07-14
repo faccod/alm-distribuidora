@@ -10,10 +10,10 @@ export const runtime = 'nodejs';
 // Usa Vercel Blob em produção (BLOB_READ_WRITE_TOKEN setado) e filesystem local em dev
 export async function POST(req: Request) {
   try {
+    const fd = await req.formData();
     const sessao = await buscarSessao();
     if (!sessao) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
-    const fd = await req.formData();
     const file = fd.get('file') as File | null;
     if (!file) return NextResponse.json({ error: 'Sem arquivo' }, { status: 400 });
 
